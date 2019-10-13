@@ -12,6 +12,7 @@ class userInfo {
     private int identity;
     private String name;
     private String id;
+    private String password;
 
     userInfo() {
         identity = -1;
@@ -41,6 +42,14 @@ class userInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
 
@@ -122,8 +131,14 @@ public class UserController {
                 String register = "insert into user (ID,password,name,avatar,identity) values(?,?,?,?,1)";
                 jdbcTemplate.update(register, param.get("stuId"), param.get("password"),param.get("name"),param.get("avatar"));
             } else {
-                tmpMP.put("status", "true");
-                tmpMP.put("userInfo", tmp);
+                String passwd = tmp.getPassword();
+                if (param.get("password").equals(passwd)){
+                    tmpMP.put("status", "true");
+                    tmpMP.put("userInfo", tmp);
+                }else{
+                    tmpMP.put("status","WrongPassword");
+                }
+
             }
         }
         return tmpMP;
